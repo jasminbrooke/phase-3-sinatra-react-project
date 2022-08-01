@@ -56,7 +56,8 @@ class ApplicationController < Sinatra::Base
       cost: params[:cost],
       price: params[:price],
       category: params[:category],
-      img_url: params[:img_url]
+      img_url: params[:img_url],
+      favorite: params[:favorite]
     )
     product.to_json
   end
