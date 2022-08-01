@@ -1,5 +1,5 @@
 class Product < ActiveRecord::Base
     belongs_to :user
 
-    validates :name, presence: true, uniqueness: true
+    validates :productname, presence: true, uniqueness: true
 end

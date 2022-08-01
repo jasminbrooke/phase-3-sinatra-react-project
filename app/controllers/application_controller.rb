@@ -69,9 +69,12 @@ class ApplicationController < Sinatra::Base
 
   # login
 
-  get 'login/:username' do
+  post '/login' do
     current_user = User.find_by(username: params[:username])
-    current_user.to_json
+    {
+      user: current_user,
+      products: current_user.products
+    }.to_json
   end
 
   get "/" do
