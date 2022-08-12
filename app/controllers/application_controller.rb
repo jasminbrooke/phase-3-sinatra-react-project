@@ -11,6 +11,8 @@ class ApplicationController < Sinatra::Base
 
   post '/users' do
     user = User.create(username: params[:username], displayname: params[:displayname])
+    return { error: user.errors.messages }.to_json unless user.valid?
+
     user.to_json
   end
 
@@ -28,8 +30,8 @@ class ApplicationController < Sinatra::Base
 
   # product CRUD
 
-  get '/products' do
-    products = Product.all.order(:created_at)
+  get '/products/:id' do
+    products = Product.where(user_id: params[:id])
     products.to_json
   end
 
@@ -72,14 +74,13 @@ class ApplicationController < Sinatra::Base
 
   post '/login' do
     current_user = User.find_by(username: params[:username])
-    {
-      user: current_user,
-      products: current_user.products
-    }.to_json
+    if current_user 
+      return {
+               user: current_user,
+               products: current_user.products
+             }.to_json
+    else
+      return { error: {:login=>"User not found"} }.to_json
+    end
   end
-
-  get "/" do
-    { message: "Good luck with your project!" }.to_json
-  end
-
 end
