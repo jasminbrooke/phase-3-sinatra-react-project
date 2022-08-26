@@ -32,7 +32,9 @@ class ApplicationController < Sinatra::Base
 
   get '/products/:id' do
     products = Product.where(user_id: params[:id])
-    products.to_json
+    results = []
+    products.each { |p| results << p.attributes.merge(profit: p.profit) }
+    results.to_json
   end
 
   post '/products' do
@@ -73,7 +75,7 @@ class ApplicationController < Sinatra::Base
   # login
 
   post '/login' do
-    current_user = User.find_by(username: params[:username])
+    current_user = User.find_by!(username: params[:username])
     if current_user 
       return {
                user: current_user,
